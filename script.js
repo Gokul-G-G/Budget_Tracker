@@ -16,7 +16,7 @@ incomeForm.addEventListener("submit", (e) => {
   income = parseInt(incomeAmount.value);
   incomeAmount.value = "";
   displayIncome.textContent = `Income is Rs ${income}`;
-  displayBalance.textContent = `Balance is Rs ${income}`;
+  updateBalance();
 });
 
 // expense -eventListener
@@ -32,6 +32,7 @@ expenseForm.addEventListener("submit", (e) => {
   expenseAmount.value = "";
   expenseCategory.value = "Food";
   updateBalance();
+  expenseForm.reset();
 });
 
 // Budget Summary
@@ -43,14 +44,23 @@ const updateBalance = () => {
   );
   const balance = income - totalExpenses;
   expenseList.innerHTML = "";
-  expenses.forEach((expense) => {
+  expenses.forEach((expense,index) => {
     const row = document.createElement("tr");
 
     row.innerHTML = `
                 <td>${expense.description}</td>
                 <td>$${expense.amount.toFixed(2)}</td>
-                <td>${expense.category}</td>`;
+                <td>${expense.category}</td>
+                <td><button class="btn btn-danger btn-sm" onclick="deleteExpense(${index})">Delete</button></td>`;
     expenseList.appendChild(row);
   });
   displayBalance.textContent = `Balance is ${balance}`;
 };
+
+
+// Delete Expense row
+
+const deleteExpense = (e)=>{
+  expenses.splice(e, 1);
+  updateBalance();
+}
